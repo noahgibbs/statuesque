@@ -45,7 +45,7 @@ module Statuesque
       adjectives = what_applies_to(adjectives)
       divisions = []
       @adj_one_of.each do |adjs|
-        divisions << adjs if adjectives & adjs
+        divisions << adjs unless (adjectives & adjs).empty?
       end
     end
   end

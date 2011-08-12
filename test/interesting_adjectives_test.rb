@@ -7,6 +7,7 @@ class InterestingAdjectivesTest < Scope::TestCase
       @world.adj_one_of :small, :large
       @world.adj_one_of :red, :green, :yellow, :brown
       @world.adj_subtype :brown, :chocolate
+      @world.adj_subtype :large, :huge, :gigantic
     end
 
     should "find sizes interesting" do
@@ -16,5 +17,11 @@ class InterestingAdjectivesTest < Scope::TestCase
     should "find applicable adjectives interesting" do
       assert_equal [[:red, :green, :yellow, :brown]], @world.interesting_adjective_divisions_for(:chocolate)
     end
+
+    should "find applicable adjectives interesting" do
+      assert_equal [[:small, :large], [:red, :green, :yellow, :brown]],
+         @world.interesting_adjective_divisions_for(:chocolate, :gigantic)
+    end
+
   end
 end

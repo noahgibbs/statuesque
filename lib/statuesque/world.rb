@@ -41,12 +41,14 @@ module Statuesque
       end
     end
 
-    def interesting_adjective_divisions(adjectives)
-      adjectives = what_applies_to(adjectives)
+    def interesting_adjective_divisions_for(*adjectives)
+      adjectives = what_applies_to(adjectives.flatten)
       divisions = []
       @adj_one_of.each do |adjs|
         divisions << adjs unless (adjectives & adjs).empty?
       end
+
+      divisions
     end
   end
 end

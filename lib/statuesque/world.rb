@@ -9,6 +9,8 @@ module Statuesque
       #@adj_one_of << [:large, :small]
       @adj_subtypes = {}
       #@adj_subtypes[:red] = [:maroon, :scarlet]
+      @adj_synonyms = []
+      #@adj_synonyms << [:large, :big]
     end
 
     def adj_subtype(main_adj, *adjs)
@@ -21,6 +23,11 @@ module Statuesque
       @adj_one_of << adjs
     end
 
+    def adj_synonyms(*adjs)
+      adjs = adjs.flatten
+      @adj_synonyms << adjs
+    end
+
     # This takes a set of adjectives and adds all
     # other applicable ones.  For instance,
     # what_applies_to("tiny", "maroon") might return
@@ -29,6 +36,10 @@ module Statuesque
     def what_applies_to(*adjectives)
       adjectives = adjectives.flatten
 
+      @adj_synonyms.each do |syns|
+        adjectives += syns unless (adjectives & syns).empty?
+      end
+
       last_adjectives = adjectives.uniq.sort
       loop do
         @adj_subtypes.keys.each do |subtype|
@@ -36,9 +47,16 @@ module Statuesque
         end
 
         adjectives = adjectives.uniq.sort
-        return adjectives if adjectives == last_adjectives
+        break adjectives if adjectives == last_adjectives
         last_adjectives = adjectives
       end
+
+      @adj_synonyms.each do |syns|
+        adjectives += syns unless (adjectives & syns).empty?
+      end
+      adjectives = adjectives.uniq.sort
+
+      adjectives
     end
 
     def interesting_adjective_divisions_for(*adjectives)

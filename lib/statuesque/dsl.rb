@@ -16,7 +16,8 @@ module Statuesque
 
       ob.name = "StatuesqueObject#{ob.object_id}" unless name
       ob.name = name if name
-      ob.instance_eval(&block)
+      ob.world = Statuesque::DSL.current_world
+      ob.instance_eval(&block) if block_given?
     end
 
     def adjectives(&block)
@@ -24,7 +25,16 @@ module Statuesque
     end
 
     class AdjectiveSetDSL
-      def self.one_of(adjectives)
+      def self.one_of(*adjectives)
+        Statuesque::DSL.current_world.adj_one_of(adjectives.flatten)
+      end
+
+      def self.subtype(*adjectives)
+        Statuesque::DSL.current_world.adj_subtype(adjectives.flatten)
+      end
+
+      def self.synonyms(*adjectives)
+        Statuesque::DSL.current_world.adj_synonyms(adjectives.flatten)
       end
     end
   end

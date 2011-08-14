@@ -11,6 +11,8 @@ module Statuesque
       #@adj_subtypes[:red] = [:maroon, :scarlet]
       @adj_synonyms = []
       #@adj_synonyms << [:large, :big]
+      @adj_notability = {}
+      #@adj_notability[:plumed] = 1.0
     end
 
     def adj_subtype(main_adj, *adjs)
@@ -26,6 +28,10 @@ module Statuesque
     def adj_synonyms(*adjs)
       adjs = adjs.flatten
       @adj_synonyms << adjs
+    end
+
+    def adj_notable(adj, amount = 1.0)
+      @adj_notability[adj] = amount
     end
 
     # This takes a set of adjectives and adds all
@@ -67,6 +73,10 @@ module Statuesque
       end
 
       divisions
+    end
+
+    def notability_of_adjective(adj)
+      @adj_notability[adj] || 0.5
     end
   end
 end
